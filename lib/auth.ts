@@ -48,5 +48,21 @@ export const authOptions:NextAuthOptions={
                 }
             } // Close authorize method
         }) // Close CredentialsProvider
-    ] // Close providers array
+    ], // Close providers array
+
+    callbacks:{
+        async jwt({token, user}){
+            if(user){
+                token.id = user.id;
+            }
+            return token;
+        },
+        async session({session,token}){
+            if(session.user){
+                session.user.id = token.id as string; // Ensure id is a string
+                
+            }
+            return session;
+        },
+    }
 } // Close authOptions object
