@@ -60,9 +60,19 @@ export const authOptions:NextAuthOptions={
         async session({session,token}){
             if(session.user){
                 session.user.id = token.id as string; // Ensure id is a string
-                
             }
             return session;
         },
-    }
+    },
+
+    pages:{
+        signIn:"/login",
+        error:"/login",
+    },
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
+
+    secret: process.env.NEXTAUTH_SECRET,
 } // Close authOptions object
