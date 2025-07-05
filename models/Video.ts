@@ -18,7 +18,7 @@ export interface IVideo {
   transformation?: {
     height:number;
     width:number;
-    quality:string;
+    quality?:number;
   };
   
 }
