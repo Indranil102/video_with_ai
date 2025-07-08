@@ -38,7 +38,35 @@ const Fileupload = ({onSuccess,onProgress,fileType}:fileUploadProps) => {
    return true;
 }
    
+const handelChange =async (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const file = e.target.files?.[0];
+    if(!file || !validateFile(file)){
+        return;
+    }
+    setUploading(true);
+    setError(null);
 
+    try {
+       const authRes= await fetch("/api/auth/imagekit-auth")
+       const atuh= await authRes.json(); 
+
+       await upload({
+         expire,
+                token: auth.token,
+                signature: atuh.signature,
+                publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
+                file,
+                fileName: file.name, 
+                expire: auth.expire,
+                onProgress: (event) => {
+                    setProgress((event.loaded / event.total) * 100);
+                },
+                // Abort signal to allow cancellation of the upload if needed.
+                abortSignal: abortController.signal,
+       })
+    } catch (error) {
+        
+    }
 
     return (
         <>
